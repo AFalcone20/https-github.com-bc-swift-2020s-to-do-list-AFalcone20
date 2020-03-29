@@ -105,14 +105,15 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="53S-jN-AoP">
-                                                    <rect key="frame" x="7" y="11" width="398" height="33"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                    <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                </textView>
+                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z3Q-Qf-swl">
+                                                    <rect key="frame" x="20" y="5" width="374" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldEditingChanged:" destination="Fqh-zC-gmt" eventType="editingChanged" id="gH4-PS-kJ1"/>
+                                                    </connections>
+                                                </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -206,7 +207,7 @@
                     <connections>
                         <outlet property="dateLabel" destination="rXG-Fg-JoJ" id="Ysr-xL-VI6"/>
                         <outlet property="datePicker" destination="epD-Tv-Y4p" id="CFR-sZ-Cbr"/>
-                        <outlet property="nameField" destination="53S-jN-AoP" id="aP7-gg-YYn"/>
+                        <outlet property="nameField" destination="z3Q-Qf-swl" id="z2Z-vl-j0f"/>
                         <outlet property="noteView" destination="VRP-oi-dwT" id="Agz-e0-eR1"/>
                         <outlet property="reminderSwitch" destination="WBS-El-ldv" id="hwx-d8-b4O"/>
                         <outlet property="saveBarButton" destination="9ki-Ra-07Q" id="ApJ-Fe-2pE"/>

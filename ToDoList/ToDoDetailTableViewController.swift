@@ -16,15 +16,15 @@ private let dateFormatter: DateFormatter = {
     return dateFormatter
 } ()
 
-class ToDoDetailTableViewController: UITableViewController {
+class ToDoDetailTableViewController: UITableViewController, UITextViewDelegate {
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
     
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var noteView: UITextView!
-    @IBOutlet weak var nameField: UITextView!
     @IBOutlet weak var reminderSwitch: UISwitch!
     @IBOutlet weak var dateLabel: UILabel!
-    
+    @IBOutlet weak var nameField: UITextField!
+
     var toDoItem: ToDoItem!
     let datePickerIndexPath = IndexPath(row: 1, section: 1)
     let notesTextViewIndexPath = IndexPath(row: 0, section: 2)
@@ -33,8 +33,18 @@ class ToDoDetailTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        //hiding the keyboard if we tap outside of a field
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+        
+        nameField.delegate = self
+        
         if toDoItem == nil {
             toDoItem = ToDoItem(name: "", date: Date().addingTimeInterval(24*60*60), notes: "", reminderSet: false, completed: false)
+            nameField.becomeFirstResponder()
         }
         updateUserInterface()
     }
@@ -46,10 +56,19 @@ class ToDoDetailTableViewController: UITableViewController {
         reminderSwitch.isOn = toDoItem.reminderSet
         dateLabel.textColor = (reminderSwitch.isOn ? .black : .gray)
         dateLabel.text = dateFormatter.string(from: toDoItem.date)
+        enableDisableSaveButton(text: nameField.text!)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toDoItem = ToDoItem(name: nameField.text!, date: datePicker.date, notes: noteView.text, reminderSet: reminderSwitch.isOn, completed: toDoItem.completed)
+    }
+    
+    func enableDisableSaveButton(text: String) {
+        if text.count > 0 {
+            saveBarButton.isEnabled = true
+        } else {
+            saveBarButton.isEnabled = false
+        }
     }
 
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
@@ -62,13 +81,20 @@ class ToDoDetailTableViewController: UITableViewController {
     }
     
     @IBAction func reminderSwitchChanged(_ sender: UISwitch) {
+        self.view.endEditing(true)
         dateLabel.textColor = (reminderSwitch.isOn ? .black : .gray)
         tableView.beginUpdates()
         tableView.endUpdates()
     }
     
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
+        self.view.endEditing(true)
         dateLabel.text = dateFormatter.string(from: sender.date)
+    }
+    
+    
+    @IBAction func textFieldEditingChanged(_ sender: UITextField) {
+        enableDisableSaveButton(text: sender.text!)
     }
     
 }
@@ -83,5 +109,12 @@ extension ToDoDetailTableViewController {
         default:
             return defaultRowHeight
         }
+    }
+}
+
+extension ToDoDetailTableViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        noteView.becomeFirstResponder()
+        return true
     }
 }
