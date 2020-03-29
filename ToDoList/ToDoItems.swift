@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 
 class ToDoItems {
@@ -24,6 +25,7 @@ class ToDoItems {
         } catch {
             print("bad \(error.localizedDescription)")
         }
+        setNotification()
     }
     
     func loadData(completed: @escaping ()->()) {
@@ -41,6 +43,23 @@ class ToDoItems {
             completed()
        }
     
+    
+    func setNotification() {
+        guard itemsArray.count > 0 else {
+            return
+        }
+        
+        //Remove all notifications
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
+        //Re-create
+        for index in 0..<itemsArray.count {
+            if itemsArray[index].reminderSet {
+                let toDoItem = itemsArray[index]
+                itemsArray[index].notificationID = LocalNotificationManager.setCalendarNotificaiton(title: toDoItem.name, subTitle: "", body: toDoItem.notes, badgeNumber: nil, sound: .default, date: toDoItem.date)
+            }
+        }
+    }
     
     
 }
