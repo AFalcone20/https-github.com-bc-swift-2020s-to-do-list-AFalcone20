@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 private let dateFormatter: DateFormatter = {
     print("I just created a Date Formatter")
@@ -34,6 +35,9 @@ class ToDoDetailTableViewController: UITableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // setup foreground notification
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         
         //hiding the keyboard if we tap outside of a field
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
@@ -48,6 +52,13 @@ class ToDoDetailTableViewController: UITableViewController, UITextViewDelegate {
         }
         updateUserInterface()
     }
+    
+    @objc func appActiveNotification() {
+        print("The App just came to the foreground")
+        updateRemeinderSwitch()
+    }
+    
+    
     
     func updateUserInterface() {
         nameField.text = toDoItem.name
